@@ -63,6 +63,7 @@ library
     , containers
     , filepath
     , directory
+    , random
     , uuid
     , neat-interpolation
     , sqlite-simple
@@ -110,6 +111,7 @@ test-suite spec
     , optics
     , optparse-applicative
     , relude
+    , random
     , time
     , text
     , containers
@@ -122,5 +124,8 @@ test-suite spec
     , QuickCheck
     , tasty 
     , tasty-hspec
+    , yggdrasil
   default-language: GHC2021
 
+
+  
