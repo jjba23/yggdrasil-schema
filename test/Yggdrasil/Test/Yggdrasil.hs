@@ -55,3 +55,17 @@ yggdrasilSpec = describe "yggdrasil" $ do
     ms <- getRanMigrations yggdrasil
     _ <- liftIO $ removeFile (fromString . T.unpack $ dbPath)
     ms `shouldBe` [(0, "0-yggdrasil.sql"), (1, "1-some-valid-sql.sql"), (2, "2-more-valid-sql-$$.sql"), (3, "3-empty.sql")]
+  it "does not do anything when runMigrations is false" $ do
+    someUUID <- liftIO nextRandom
+    let dbPath = "./resources/test/" <> (T.pack . show $ someUUID) <> ".sqlite"
+        yggdrasil =
+          Yggdrasil
+            { databaseFilePath = dbPath,
+              migrationsDirectoryPath = "./resources/test/migration-files/",
+              engine = SQLite,
+              runMigrations = False
+            }
+    _ <- runYggdrasil yggdrasil
+    ms <- getRanMigrations yggdrasil
+    _ <- liftIO $ removeFile (fromString . T.unpack $ dbPath)
+    ms `shouldBe` []

@@ -66,9 +66,7 @@ runYggdrasil yggdrasil = when (yggdrasil ^. #runMigrations) $ do
           mapM_ (runMigration yggdrasil) toRun'
   where
     handler :: SQLError -> IO [(Int, Text)]
-    handler ex = do
-      putStrLn $ "Caught exception: " ++ show ex
-      pure []
+    handler _ = pure []
 
 getSortedMigrationFiles :: (MonadIO m) => Yggdrasil -> m [(Int, Text)]
 getSortedMigrationFiles yggdrasil = do
@@ -123,7 +121,9 @@ runMigration yggdrasil (ord', fPath) = do
 getRanMigrations :: (MonadIO m) => Yggdrasil -> m [(Int, Text)]
 getRanMigrations yggdrasil = do
   conn <- liftIO $ open (fromString . T.unpack $ yggdrasil ^. #databaseFilePath)
-  (ms :: [RanMigration]) <- liftIO $ query_ conn "SELECT identifier, order_value, file_name, ran_at from yggdrasil"
+  (ms :: [RanMigration]) <- liftIO $ catch (query_ conn "SELECT identifier, order_value, file_name, ran_at from yggdrasil") handler
   pure . sortOn fst . map mapRanMigration $ ms
   where
     mapRanMigration (RanMigration _ orderValue fileName _) = (orderValue, fileName)
+    handler :: SQLError -> IO [RanMigration]
+    handler _ = pure []
