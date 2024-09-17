@@ -5,6 +5,9 @@
 
 module Yggdrasil where
 
+import Control.Exception
+import Data.List (minimumBy)
+import Data.List.NonEmpty qualified as NE
 import Data.Text qualified as T
 import Data.Time
 import Data.UUID.V4
@@ -26,6 +29,12 @@ data Yggdrasil = Yggdrasil
 
 makeFieldLabelsNoPrefix ''Yggdrasil
 
+data RanMigration = RanMigration Text Int Text UTCTime
+  deriving (Generic, Eq, Show)
+
+instance FromRow RanMigration where
+  fromRow = RanMigration <$> field <*> field <*> field <*> field
+
 defaultYggdrasil :: Yggdrasil
 defaultYggdrasil =
   Yggdrasil
@@ -38,8 +47,28 @@ defaultYggdrasil =
 runYggdrasil :: (MonadIO m) => Yggdrasil -> m ()
 runYggdrasil yggdrasil = when (yggdrasil ^. #runMigrations) $ do
   sortedFiles <- getSortedMigrationFiles yggdrasil
-  _ <- print sortedFiles
-  mapM_ (runMigration yggdrasil) sortedFiles
+  case nonEmpty sortedFiles of
+    Nothing -> error "No valid migration files found!"
+    Just ordersAndFiles -> do
+      ranMigrations <- liftIO $ catch (getRanMigrations yggdrasil) handler
+
+      let execReqHighest = minimumBy (comparing Down) $ NE.map fst ordersAndFiles
+          isThereHigher = isJust . find (\p -> fst p > execReqHighest) $ ranMigrations
+      when isThereHigher $ error "Detected a migration order mismatch! History contains newer items than in migrations folder!"
+
+      let toRun = NE.filter (\t -> isNothing $ find (== t) ranMigrations) ordersAndFiles
+
+      case nonEmpty toRun of
+        Nothing -> print ("All migrations up to date!" :: String)
+        Just toRun' -> do
+          _ <- print ("About to run migrations!" :: String)
+          _ <- print toRun'
+          mapM_ (runMigration yggdrasil) toRun'
+  where
+    handler :: SQLError -> IO [(Int, Text)]
+    handler ex = do
+      putStrLn $ "Caught exception: " ++ show ex
+      pure []
 
 getSortedMigrationFiles :: (MonadIO m) => Yggdrasil -> m [(Int, Text)]
 getSortedMigrationFiles yggdrasil = do
@@ -90,3 +119,11 @@ runMigration yggdrasil (ord', fPath) = do
       [trimming|
       INSERT INTO yggdrasil (identifier, order_value, file_name, ran_at) VALUES (?,?,?,?)
       |]
+
+getRanMigrations :: (MonadIO m) => Yggdrasil -> m [(Int, Text)]
+getRanMigrations yggdrasil = do
+  conn <- liftIO $ open (fromString . T.unpack $ yggdrasil ^. #databaseFilePath)
+  (ms :: [RanMigration]) <- liftIO $ query_ conn "SELECT identifier, order_value, file_name, ran_at from yggdrasil"
+  pure . sortOn fst . map mapRanMigration $ ms
+  where
+    mapRanMigration (RanMigration _ orderValue fileName _) = (orderValue, fileName)

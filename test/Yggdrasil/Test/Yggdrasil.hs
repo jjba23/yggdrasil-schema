@@ -1,6 +1,9 @@
 module Yggdrasil.Test.Yggdrasil where
 
+import Data.Text qualified as T
+import Data.UUID.V4
 import Relude
+import System.Directory
 import Test.Hspec
 import Yggdrasil
 
@@ -20,4 +23,31 @@ yggdrasilSpec = describe "yggdrasil" $ do
     explodeMigrationPath "23-init with spaces and weird symbols$.sql" `shouldBe` Just ("23", "23-init with spaces and weird symbols$.sql")
   it "gets files in the right order" $ do
     xs <- getSortedMigrationFiles defaultYggdrasil {migrationsDirectoryPath = "./resources/test/migration-files/"}
-    xs `shouldBe` [(0, "0-empty.sql"), (1, "1-some-valid-sql.sql"), (2, "2-more-valid-sql-$$.sql")]
+    xs `shouldBe` [(0, "0-yggdrasil.sql"), (1, "1-some-valid-sql.sql"), (2, "2-more-valid-sql-$$.sql"), (3, "3-empty.sql")]
+  it "does run migrations correctly on clean DB" $ do
+    someUUID <- liftIO nextRandom
+    let dbPath = "./resources/test/" <> (T.pack . show $ someUUID) <> ".sqlite"
+        yggdrasil =
+          Yggdrasil
+            { databaseFilePath = dbPath,
+              migrationsDirectoryPath = "./resources/test/migration-files/",
+              engine = SQLite,
+              runMigrations = True
+            }
+    _ <- runYggdrasil yggdrasil
+    _ <- liftIO $ removeFile (fromString . T.unpack $ dbPath)
+    True `shouldBe` True
+
+-- it "does skip migrations correctly on used DB" $ do
+--   someUUID <- liftIO nextRandom
+--   let dbPath = "./resources/test/" <> (T.pack . show $ someUUID) <> ".sqlite"
+--       yggdrasil =
+--         Yggdrasil
+--           { databaseFilePath = dbPath,
+--             migrationsDirectoryPath = "./resources/test/migration-files/",
+--             engine = SQLite,
+--             runMigrations = True
+--           }
+--   _ <- runYggdrasil yggdrasil
+--   _ <- liftIO $ removeFile (fromString . T.unpack $ dbPath)
+--   True `shouldBe` True
