@@ -46,7 +46,7 @@
       in flake // {
         legacyPackages = pkgs;
         packages.default = flake.packages."yggdrasil:lib:yggdrasil";
-        packages.test = flake.packages."yggdrasil:test:spec";
+        packages.test = flake.packages."yggdrasil:test:yggdrasil-spec";
       });
 
 }
