@@ -1,5 +1,13 @@
 * Yggdrasil
 
+html
+<div>
+<img src="https://img.shields.io/badge/Haskell-5D4F85?logo=haskell&logoColor=fff&style=plastic" alt="Haskell"/>
+<img src="https://img.shields.io/badge/SQLite-4169E1?logo=sqlite&logoColor=fff&style=plastic" alt="SQLite"/>
+<img src="https://img.shields.io/badge/Nix-5277C3?logo=nixos&logoColor=fff&style=plastic" alt="Nix"/>
+</div>
+#+end_html
+
 Yggdrasil is a Haskell-based tool for managing database migrations.
 Inspired by tools like Flyway, or Liquibase, it automates the process of applying migrations, keeping track of which migrations have been executed, and ensuring they only run once.
 
@@ -33,6 +41,17 @@ All you need is a directory with migration files.
 The only requirement in naming the files is that they start with a number and a dash, so that the order can be determined.
 
 Examples of valid files: ~0-init-my-database.sql~ , ~100-another migration with spaces.txt~
+
+To get things working properly, please ensure that your first migration, called something like ~0-yggdrasil.sql~ contains the following:
+#+begin_src sql
+CREATE TABLE yggdrasil (
+  identifier TEXT NOT NULL PRIMARY KEY,
+  order_value INTEGER NOT NULl,
+  file_name TEXT NOT NULL,
+  ran_at TEXT NOT NULL
+);
+
+#+end_src
 
 ** Extending Yggdrasil
 
