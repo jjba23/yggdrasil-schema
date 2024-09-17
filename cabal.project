@@ -1,1 +1,7 @@
+source-repository-package
+  type: git
+  location: https://github.com/jjba23/keuringsdienst.git
+  tag: def0f5180b1a0c00d8cd4669066d08c2525d0917
+  --sha256: QICivRBGhrJx4MkOmFeOHNPus8CXuPkL9l/BX9Fiz7I=
+  
 packages: .
