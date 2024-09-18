@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
-name:           yggdrasil
+name:           yggdrasil-schema
 version:        1.0.0.0
-description:    Please see the README at <https://github.com/jjba23/yggdrasil>
-homepage:       https://github.com/jjba23/yggdrasil
-bug-reports:    https://github.com/jjba23/yggdrasil/issues
+description:    Please see the README at <https://github.com/jjba23/yggdrasil-schema>
+homepage:       https://github.com/jjba23/yggdrasil-schema
+bug-reports:    https://github.com/jjba23/yggdrasil-schema/issues
 author:         Josep Bigorra
 maintainer:     Josep Bigorra <jjbigorra@gmail.com>
 copyright:      2024 Josep Bigorra
@@ -16,13 +16,13 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/jjba23/yggdrasil
+  location: https://github.com/jjba23/yggdrasil-schema
 
 library
   exposed-modules:
       Yggdrasil
   other-modules:
-      Paths_yggdrasil
+      Paths_yggdrasil_schema
   hs-source-dirs:
       src
   ghc-options: -Wall -threaded
@@ -70,11 +70,11 @@ library
   default-language: GHC2021
 
 
-test-suite yggdrasil-spec
+test-suite yggdrasil-schema-spec
   type: exitcode-stdio-1.0
   main-is: Spec.hs      
   other-modules:
-      Paths_yggdrasil
+      Paths_yggdrasil_schema
       Yggdrasil.Test.Yggdrasil
   hs-source-dirs:
       test

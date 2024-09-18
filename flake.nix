@@ -1,5 +1,5 @@
 {
-  description = "Yggdrasil flake";
+  description = "Yggdrasil Schema flake";
   inputs = {
     haskellNix.url = "github:input-output-hk/haskell.nix";
     nixpkgs.follows = "haskellNix/nixpkgs-unstable";
@@ -45,8 +45,10 @@
         flake = pkgs.yggdrasilProject.flake { };
       in flake // {
         legacyPackages = pkgs;
-        packages.default = flake.packages."yggdrasil:lib:yggdrasil";
-        packages.test = flake.packages."yggdrasil:test:yggdrasil-spec";
+        packages.default =
+          flake.packages."yggdrasil-schema:lib:yggdrasil-schema";
+        packages.test =
+          flake.packages."yggdrasil-schema:test:yggdrasil-schemaspec";
       });
 
 }
