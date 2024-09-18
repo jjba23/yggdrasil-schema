@@ -9,4 +9,3 @@ result
 resources/secrets
 resources/*.sqlite
 *.sqlite
-resources/test/
