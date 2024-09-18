@@ -48,7 +48,7 @@
         packages.default =
           flake.packages."yggdrasil-schema:lib:yggdrasil-schema";
         packages.test =
-          flake.packages."yggdrasil-schema:test:yggdrasil-schemaspec";
+          flake.packages."yggdrasil-schema:test:yggdrasil-schema-spec";
       });
 
 }

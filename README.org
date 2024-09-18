@@ -1,4 +1,4 @@
-* Yggdrasil
+* Yggdrasil Schema
 
 #+begin_html
 <div>
@@ -8,10 +8,10 @@
 </div>
 #+end_html
 
-Yggdrasil is a Haskell-based tool for managing database migrations.
+Yggdrasil Schema is a Haskell-based tool for managing database migrations.
 Inspired by tools like Flyway, or Liquibase, it automates the process of applying migrations, keeping track of which migrations have been executed, and ensuring they only run once.
 
-Yggdrasil is designed to be simple, extensible, and adaptable to various storage engines.
+Yggdrasil Schema is designed to be simple, extensible, and adaptable to various storage engines.
 
 Initially, it supports SQLite, but its architecture is open for future extensions to support additional storage engines.
 As of now available as library only, in the future also as CLI standalone tool (with optparse-applicative).

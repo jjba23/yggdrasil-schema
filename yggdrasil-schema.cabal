@@ -124,7 +124,7 @@ test-suite yggdrasil-schema-spec
     , QuickCheck
     , tasty 
     , tasty-hspec
-    , yggdrasil
+    , yggdrasil-schema
   default-language: GHC2021
 
 
