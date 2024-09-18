@@ -18,6 +18,9 @@ jobs:
         with:
           ghc-version: '9.6' 
           cabal-version: '3.0.0.0'
+      - run: |
+          cabal update
+          cabal test
       - run: cabal sdist -o .
       - uses: haskell-actions/hackage-publish@v1
         with:
