@@ -14,9 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        with:
+          ghc-version: '9.6' 
+          cabal-version: '3.0.0.0'
+      - run: cabal sdist -o .
       - uses: haskell-actions/hackage-publish@v1
         with:
           hackageToken: ${{ secrets.HACKAGE_AUTH_TOKEN }}
-          packagesPath: ${{ runner.temp }}/packages
-          docsPath: ${{ runner.temp }}/docs
+          packagesPath: .
           publish: true
