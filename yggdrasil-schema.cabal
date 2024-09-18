@@ -1,7 +1,7 @@
 cabal-version: 1.12
 
 name:           yggdrasil-schema
-version:        1.0.0.4
+version:        1.0.0.5
 description:    Please see the README at <https://github.com/jjba23/yggdrasil-schema>
 homepage:       https://github.com/jjba23/yggdrasil-schema
 bug-reports:    https://github.com/jjba23/yggdrasil-schema/issues
