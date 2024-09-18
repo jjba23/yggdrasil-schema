@@ -17,11 +17,10 @@ jobs:
       - uses: haskell-actions/setup@v2
         with:
           ghc-version: '9.6' 
-          cabal-version: '3.12.1.0'
-      - run: |
-          cabal update
-          cabal test
-      - run: cabal sdist -o .
+          enable-stack: true
+          stack-version: 'latest'
+      - run: stack test
+      - run: stack sdist --tar-dir .
       - uses: haskell-actions/hackage-publish@v1
         with:
           hackageToken: ${{ secrets.HACKAGE_AUTH_TOKEN }}

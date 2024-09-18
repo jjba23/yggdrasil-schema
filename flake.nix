@@ -31,6 +31,7 @@
                 nixfmt
                 ghcid
                 statix
+                stack
                 deadnix
                 jq
                 awscli2
