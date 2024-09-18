@@ -1,6 +1,4 @@
 .stack-work
-apollo-api.cabal
-stack.yaml.lock
 data/
 dist-newstyle/
 .HTF/
