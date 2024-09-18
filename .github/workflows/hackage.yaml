@@ -1,0 +1,22 @@
+name: Hackage publish
+
+on:
+  push:
+    branches: ["trunk"]
+
+concurrency: 
+  group: ${{ github.head_ref || github.ref_name }} 
+  cancel-in-progress: true
+
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/hackage-publish@v1
+        with:
+          hackageToken: ${{ secrets.HACKAGE_AUTH_TOKEN }}
+          packagesPath: ${{ runner.temp }}/packages
+          docsPath: ${{ runner.temp }}/docs
+          publish: true
