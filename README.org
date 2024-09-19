@@ -33,6 +33,9 @@ As of now available as library only, in the future also as CLI standalone tool (
 
 Once installed, you can use Yggdrasil to apply migrations to your database.
 
+Take a look at the tests for Yggdrasil itself to familiarize yourself with what it can do, as library:
+[[./test/Yggdrasil/Test/Yggdrasil.hs][./test/Yggdrasil/Test/Yggdrasil.hs]]
+
 By default, Yggdrasil SQLite branch looks for migration files in the ~./resources/migrations/sqlite/~ directory.
 
 *NOTE* : Keep in mind this slash ( / ) at the end is very important.
